@@ -1,14 +1,18 @@
 package com.example.todoapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -92,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
+
         loadNotes();
     }
 
@@ -105,7 +110,33 @@ public class MainActivity extends AppCompatActivity {
     //Create new recyclerView element and NoteAdapter
     public void loadNotes() {
         notes = readNotes();
-        noteAdapter = new NoteAdapter(notes,this);
+        noteAdapter = new NoteAdapter(notes, this, new NoteAdapter.NoteClickListener() {
+            @Override
+            public void onItemClick(int positionOfTheNote, View view) {
+                editNote(notes.get(positionOfTheNote).getId(),view);
+            }
+        });
         recyclerView.setAdapter(noteAdapter);
+    }
+
+    private void editNote(int noteId, View view) {
+        NoteHandler noteHandler = new NoteHandler(this);
+        Note note = noteHandler.readSingleNote(noteId);
+        Intent intent = new Intent(this,EditNote.class);
+        intent.putExtra("title", note.getTitle());
+        intent.putExtra("description", note.getDescription());
+        intent.putExtra("id", note.getId());
+
+        ActivityOptionsCompat optCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, ViewCompat.getTransitionName(view));
+        startActivityForResult(intent, 1, optCompat.toBundle());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            loadNotes();
+        }
     }
 }
