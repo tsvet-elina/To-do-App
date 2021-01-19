@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center_horizontal"
     android:elevation="9dp"
+    android:transitionName="expanding_transition"
     app:cardBackgroundColor="#1A000000"
     app:cardCornerRadius="9dp"
     android:layout_width="match_parent"
@@ -31,10 +32,11 @@
 
         <TextView
             android:id="@+id/txt_note_info"
-            android:text="Edit Hello World!dsfsdfdfdfdfdfddfddffdfvfvfdgffdgfgfgfgfgfgfgfgffgf"
             android:layout_width="0dp"
+            android:text="dsdsdsdsdsdsddsdsdssdsdsdsdssddsdsdssd"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:padding="5dp"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:maxLines="1"
